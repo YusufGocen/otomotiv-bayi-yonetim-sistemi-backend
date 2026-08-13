@@ -1,6 +1,11 @@
 package com.YusufGocen.controller.İmpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +35,25 @@ public class RestCustomerControllerİmpl extends RestBaseController implements I
 		
 		
 		return ok(customerService.saveCustomer(dtoCustomerIU));
+	}
+
+	@GetMapping("/list")
+	@Override
+	public RootEntity<List<DtoCustomer>> getAllCustomer() {
+		return ok(customerService.getAllCustomer());
+	}
+
+	@GetMapping("/{id}")
+	@Override
+	public RootEntity<DtoCustomer> getCustomerById(@PathVariable("id") Long id) {
+		return ok(customerService.getCustomerById(id));
+	}
+
+	@DeleteMapping("/delete/{id}")
+	@Override
+	public RootEntity<Void> deleteCustomer(@PathVariable("id") Long id) {
+		customerService.deleteCustomer(id);
+		return ok(null);
 	}
 
 

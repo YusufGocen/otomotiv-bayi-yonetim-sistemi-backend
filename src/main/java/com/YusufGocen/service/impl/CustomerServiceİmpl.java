@@ -1,6 +1,7 @@
 package com.YusufGocen.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -75,6 +76,69 @@ public class CustomerServiceİmpl implements ICustomerService{
 		dtoCustomer.setAccount(dtoAccount);
 		
 		return dtoCustomer;
+	}
+
+	
+	@Override
+	public List<DtoCustomer> getAllCustomer() {
+		
+		List<Customer>customerList=customerRepository.findAll();
+		
+		List<DtoCustomer>dtoCustomerList=new java.util.ArrayList<>();
+		
+	    for (Customer customer : customerList) {
+
+	        DtoCustomer dtoCustomer = new DtoCustomer();
+	        DtoAddress dtoAddress = new DtoAddress();
+	        DtoAccount dtoAccount = new DtoAccount();
+
+	        BeanUtils.copyProperties(customer, dtoCustomer);
+
+	        if (customer.getAddress() != null) {
+	            BeanUtils.copyProperties(customer.getAddress(), dtoAddress);
+	            dtoCustomer.setAddress(dtoAddress);
+	        }
+
+	        if (customer.getAccount() != null) {
+	            BeanUtils.copyProperties(customer.getAccount(), dtoAccount);
+	            dtoCustomer.setAccount(dtoAccount);
+	        }
+
+	        dtoCustomerList.add(dtoCustomer);
+	    }
+		
+		return dtoCustomerList;
+	}
+
+	
+	@Override
+	public DtoCustomer getCustomerById(Long id) {
+		
+		Customer customer=customerRepository.findById(id).orElseThrow(()->new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,id.toString())));
+		
+		DtoCustomer dtoCustomer=new DtoCustomer();
+		DtoAddress dtoAddress=new DtoAddress();
+		DtoAccount dtoAccount=new DtoAccount();
+		
+		BeanUtils.copyProperties(customer, dtoCustomer);
+		
+	    if (customer.getAddress() != null) {
+	        BeanUtils.copyProperties(customer.getAddress(), dtoAddress);
+	        dtoCustomer.setAddress(dtoAddress);
+	    }
+
+	    if (customer.getAccount() != null) {
+	        BeanUtils.copyProperties(customer.getAccount(), dtoAccount);
+	        dtoCustomer.setAccount(dtoAccount);
+	    }
+		
+		return dtoCustomer;
+	}
+
+	@Override
+	public void deleteCustomer(Long id) {
+		Customer customer=customerRepository.findById(id).orElseThrow(()->new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,id.toString())));
+		customerRepository.delete(customer);
 	}
 
 }

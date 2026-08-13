@@ -16,6 +16,13 @@ import com.YusufGocen.handler.AuthEntryPoint;
 import com.YusufGocen.jwt.JWTAuthenticationFilter;
 
 import jakarta.security.auth.message.callback.PrivateKeyCallback.Request;
+import java.util.List;
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import org.springframework.security.config.Customizer;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +30,7 @@ public class SecurityConfig {
 
 	public static final String REGISTER = "/register";
 	public static final String AUTHENTICATE = "/authenticate";
-	public static final String REFRESH_TOKEN = "/refreshtoken";
+	public static final String REFRESH_TOKEN = "/refreshToken";
 
 	@Autowired
 	private AuthenticationProvider authenticationProvider;
@@ -38,7 +45,9 @@ public class SecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable()
+		http
+	    .cors(Customizer.withDefaults())
+	    .csrf(csrf -> csrf.disable())
 		.authorizeHttpRequests(request ->
 		request.requestMatchers(REGISTER, AUTHENTICATE , REFRESH_TOKEN ,
 				"/swagger-ui/**",
@@ -54,4 +63,25 @@ public class SecurityConfig {
 		
 		return http.build();
 	}
+	
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+
+	    CorsConfiguration configuration = new CorsConfiguration();
+
+	    configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+	    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+	    configuration.setAllowedHeaders(List.of("*"));
+	    configuration.setAllowCredentials(true);
+
+	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    source.registerCorsConfiguration("/**", configuration);
+
+	    return source;
+	}
 }
+
+
+
+
+    

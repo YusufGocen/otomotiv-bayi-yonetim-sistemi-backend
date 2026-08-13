@@ -33,6 +33,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
+		
 		String header=request.getHeader("Authorization");
 		if(header==null) {
 			filterChain.doFilter(request, response);
@@ -59,6 +60,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 			
 		} 
 		
+		
 		catch (ExpiredJwtException ex) {
 			throw new BaseException(new ErrorMessage(com.YusufGocen.exception.MessageType.TOKEN_IS_EXCEPTİON,token));
 		}
@@ -66,7 +68,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 			throw new BaseException(new ErrorMessage(com.YusufGocen.exception.MessageType.GENERAL_EXCEPTION,token));
 		}
 		filterChain.doFilter(request, response);
-		
 	}
+	
+	
 
 }

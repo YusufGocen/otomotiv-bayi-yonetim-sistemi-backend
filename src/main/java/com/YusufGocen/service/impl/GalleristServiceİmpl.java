@@ -1,6 +1,7 @@
 package com.YusufGocen.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -60,6 +61,78 @@ public class GalleristServiceİmpl implements IGalleristService{
 		return dtoGallerist;
 	}
 
+
+	@Override
+	public List<DtoGallerist> getAllGallerist() {
+		
+		List<Gallerist>galleristList=galleristRepository.findAll();
+		
+		List<DtoGallerist>dtoGalleristList=new java.util.ArrayList<>(); 
+		
+	    for (Gallerist gallerist : galleristList) {
+
+	        DtoGallerist dtoGallerist = new DtoGallerist();
+	        DtoAddress dtoAddress = new DtoAddress();
+
+	        BeanUtils.copyProperties(gallerist, dtoGallerist);
+
+	        if (gallerist.getAddress() != null) {
+	            BeanUtils.copyProperties(
+	                    gallerist.getAddress(),
+	                    dtoAddress
+	            );
+
+	            dtoGallerist.setAddress(dtoAddress);
+	        }
+
+	        dtoGalleristList.add(dtoGallerist);
+	    }
+		
+		
+		return dtoGalleristList;
+	}
+
+
+	@Override
+	public DtoGallerist getGalleristById(Long id) {
+	    Gallerist gallerist = galleristRepository.findById(id)
+	            .orElseThrow(() -> new BaseException(
+	                    new ErrorMessage(
+	                            MessageType.NO_RECORD_EXIST,
+	                            id.toString()
+	                    )
+	            ));
+
+	    DtoGallerist dtoGallerist = new DtoGallerist();
+	    DtoAddress dtoAddress = new DtoAddress();
+
+	    BeanUtils.copyProperties(gallerist, dtoGallerist);
+
+	    if (gallerist.getAddress() != null) {
+	        BeanUtils.copyProperties(
+	                gallerist.getAddress(),
+	                dtoAddress
+	        );
+
+	        dtoGallerist.setAddress(dtoAddress);
+	    }
+
+	    return dtoGallerist;
+	}
+
+
+	@Override
+	public void deleteGallerist(Long id) {
+	    Gallerist gallerist = galleristRepository.findById(id)
+	            .orElseThrow(() -> new BaseException(
+	                    new ErrorMessage(
+	                            MessageType.NO_RECORD_EXIST,
+	                            id.toString()
+	                    )
+	            ));
+	    galleristRepository.delete(gallerist);
+	}
+	
 }
 
 

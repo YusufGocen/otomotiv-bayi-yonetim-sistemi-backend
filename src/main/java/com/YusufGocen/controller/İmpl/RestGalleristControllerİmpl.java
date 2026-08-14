@@ -1,6 +1,11 @@
 package com.YusufGocen.controller.İmpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +33,25 @@ public class RestGalleristControllerİmpl extends RestBaseController implements 
 	@Override
 	public RootEntity<DtoGallerist> saveGallerist(@Valid @RequestBody DtoGalleristIU dtoGalleristIU) {
 		return ok(galleristService.saveGallerist(dtoGalleristIU));
+	}
+
+	@GetMapping("/list")
+	@Override
+	public RootEntity<List<DtoGallerist>> getAllGallerist() {
+		return ok(galleristService.getAllGallerist());
+	}
+
+	@GetMapping("/{id}")
+	@Override
+	public RootEntity<DtoGallerist> getGalleristById(@PathVariable("id") Long id ) {
+		return ok(galleristService.getGalleristById(id));
+	}
+
+	@DeleteMapping("/delete/{id}")
+	@Override
+	public RootEntity<Void> deleteGallerist(@PathVariable("id") Long id) {
+		galleristService.deleteGallerist(id);
+		return ok(null);
 	}
 
 }

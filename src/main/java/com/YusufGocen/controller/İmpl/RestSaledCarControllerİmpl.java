@@ -1,6 +1,10 @@
 package com.YusufGocen.controller.İmpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +32,18 @@ public class RestSaledCarControllerİmpl extends RestBaseController implements I
 	@Override
 	public RootEntity<DtoCarSaled> buyCar(@Valid @RequestBody DtoSaledCarIU dtoSaledCarIU) {
 		return ok(saledCarService.buyCar(dtoSaledCarIU));
+	}
+
+	@GetMapping("list")
+	@Override
+	public RootEntity<List<DtoCarSaled>> getAllSaledCars() {
+		return ok(saledCarService.getAllSaledCars());
+	}
+
+	@GetMapping("/{id}")
+	@Override
+	public RootEntity<DtoCarSaled> getSaledCarById(@PathVariable("id") Long id) {
+		return ok(saledCarService.getSaledCarById(id));
 	}
 
 }

@@ -2,7 +2,10 @@ package com.YusufGocen.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -159,6 +162,34 @@ public class SaledCarServiceİmpl implements ISaledCarService{
 		return dtoCarSaled;
 		
 		
+	}
+
+	@Override
+	public List<DtoCarSaled> getAllSaledCars() {
+		
+		List<SaledCar>saledCarsList=saledCarRepository.findAll();
+		
+		List<DtoCarSaled>dtoCarSaledList=new ArrayList<>();
+		
+		for (SaledCar saledCar : saledCarsList) {
+			dtoCarSaledList.add(toDto(saledCar));
+		}
+		
+		return dtoCarSaledList;
+	}
+
+	@Override
+	public DtoCarSaled getSaledCarById(Long id) {
+		
+		SaledCar saledCar=saledCarRepository.findById(id)
+	            .orElseThrow(() -> new BaseException(
+	                    new ErrorMessage(
+	                            MessageType.NO_RECORD_EXIST,
+	                            id.toString()
+	                    )
+	            ));
+		
+		return toDto(saledCar);
 	}
 
 }
